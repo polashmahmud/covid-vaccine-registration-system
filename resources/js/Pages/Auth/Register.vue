@@ -8,6 +8,7 @@ import { Head, Link, useForm } from '@inertiajs/vue3';
 
 const form = useForm({
     name: '',
+    nid: '',
     email: '',
     password: '',
     password_confirmation: '',
@@ -33,7 +34,7 @@ const submit = () => {
                     type="text"
                     class="mt-1 block w-full"
                     v-model="form.name"
-                    required
+
                     autofocus
                     autocomplete="name"
                 />
@@ -49,11 +50,24 @@ const submit = () => {
                     type="email"
                     class="mt-1 block w-full"
                     v-model="form.email"
-                    required
+
                     autocomplete="username"
                 />
 
                 <InputError class="mt-2" :message="form.errors.email" />
+            </div>
+
+            <div class="mt-4">
+                <InputLabel for="nid" value="NID" />
+
+                <TextInput
+                    id="nid"
+                    type="number"
+                    class="mt-1 block w-full"
+                    v-model="form.nid"
+                />
+
+                <InputError class="mt-2" :message="form.errors.nid" />
             </div>
 
             <div class="mt-4">
@@ -64,7 +78,7 @@ const submit = () => {
                     type="password"
                     class="mt-1 block w-full"
                     v-model="form.password"
-                    required
+
                     autocomplete="new-password"
                 />
 
@@ -82,7 +96,7 @@ const submit = () => {
                     type="password"
                     class="mt-1 block w-full"
                     v-model="form.password_confirmation"
-                    required
+
                     autocomplete="new-password"
                 />
 
