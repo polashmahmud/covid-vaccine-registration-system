@@ -13,9 +13,9 @@ class VaccineCenterFactory extends Factory
     public function definition()
     {
         return [
-            'name' => $this->faker->name(),
-            'location' => $this->faker->word(),
-            'daily_capacity' => $this->faker->numberBetween(50, 100),
+            'name' => $this->faker->company(),
+            'location' => $this->faker->locale(),
+            'daily_capacity' => $this->faker->numberBetween(10, 50),
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
         ];

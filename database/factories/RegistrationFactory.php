@@ -6,6 +6,7 @@ use App\Models\Registration;
 use App\Models\User;
 use App\Models\VaccineCenter;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Carbon;
 
 class RegistrationFactory extends Factory
@@ -14,14 +15,31 @@ class RegistrationFactory extends Factory
 
     public function definition()
     {
+        $status = $this->faker->randomElement(['not_scheduled', 'scheduled', 'vaccinated']);
+
+        $scheduledDate = null;
+
+        if ($status !== 'not_scheduled') {
+            $date = Carbon::now();
+            $possibleDates = [];
+
+            while ($date->lte(Carbon::now()->addMonth())) {
+                if (!in_array($date->dayOfWeek, [Carbon::FRIDAY, Carbon::SATURDAY])) {
+                    $possibleDates[] = $date->copy();
+                }
+                $date->addDay();
+            }
+
+            $scheduledDate = Arr::random($possibleDates);
+        }
+
         return [
-            'scheduled_date' => Carbon::now(),
-            'status' => $this->faker->randomElement(['not_scheduled', 'scheduled', 'vaccinated']),
+            'status' => $status,
+            'scheduled_date' => $scheduledDate,
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
-
             'user_id' => User::factory(),
-            'vaccine_center_id' => VaccineCenter::factory(),
+            'vaccine_center_id' => VaccineCenter::all()->random()->id,
         ];
     }
 }
