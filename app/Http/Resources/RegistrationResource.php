@@ -5,6 +5,7 @@ namespace App\Http\Resources;
 use App\Models\Registration;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Str;
 
 /** @mixin Registration */
 class RegistrationResource extends JsonResource
@@ -14,7 +15,7 @@ class RegistrationResource extends JsonResource
         return [
             'id' => $this->id,
             'scheduled_date' => $this->scheduled_date,
-            'status' => $this->status,
+            'status' => Str::title(Str::replace('_', ' ', $this->status)),
             'user' => new UserResource($this->whenLoaded('user')),
             'vaccineCenter' => new VaccineCenterResource($this->whenLoaded('vaccineCenter')),
         ];
