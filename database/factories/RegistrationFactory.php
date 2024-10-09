@@ -17,14 +17,14 @@ class RegistrationFactory extends Factory
     {
         $status = $this->faker->randomElement(['not_scheduled', 'scheduled', 'vaccinated']);
 
+       // Generate a random date that is either Sunday or Thursday
         $scheduledDate = null;
-
         if ($status !== 'not_scheduled') {
             $date = Carbon::now();
             $possibleDates = [];
 
             while ($date->lte(Carbon::now()->addMonth())) {
-                if (!in_array($date->dayOfWeek, [Carbon::FRIDAY, Carbon::SATURDAY])) {
+                if (in_array($date->dayOfWeek, [Carbon::SUNDAY, Carbon::THURSDAY])) {
                     $possibleDates[] = $date->copy();
                 }
                 $date->addDay();

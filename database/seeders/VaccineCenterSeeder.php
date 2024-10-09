@@ -36,7 +36,7 @@ class VaccineCenterSeeder extends Seeder
             VaccineCenter::create([
                 'name' => $center['name'],
                 'location' => $center['location'],
-                'daily_capacity' => rand(10, 50),
+                'daily_capacity' => rand(10, 20),
             ]);
         }
     }
