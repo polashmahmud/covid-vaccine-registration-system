@@ -2,11 +2,15 @@
 
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\VaccineScheduleController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', HomeController::class)->name('home');
 
 Route::middleware('auth')->group(function () {
+    // add vaccine schedule
+    Route::get('/vaccine-schedule', [VaccineScheduleController::class, 'index'])->name('vaccine-schedule.index');
+
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
