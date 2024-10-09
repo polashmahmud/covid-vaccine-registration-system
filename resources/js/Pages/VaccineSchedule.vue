@@ -1,11 +1,13 @@
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import {Head, useForm} from '@inertiajs/vue3';
-import TextInput from "@/Components/TextInput.vue";
 import InputError from "@/Components/InputError.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import VaccineCenter from "@/Components/VaccineCenter.vue";
 import Pagination from "@/Components/Pagination.vue";
+import {onMounted, ref} from "vue";
+import { easepick, LockPlugin } from "@easepick/bundle";
+import style from "@easepick/bundle/dist/index.css?url";
 
 const props = defineProps({
     vaccineCenters: Object,
@@ -25,6 +27,38 @@ const handleSelectVaccineCenter = (center) => {
     form.vaccine_center_location = center.location;
 }
 
+const pickerRef = ref(null);
+let picker = null;
+
+const createPicker = () => {
+    picker = new easepick.create({
+        element: pickerRef.value,
+        readonly: true,
+        zIndex: 50,
+        css: [
+            style
+        ],
+        plugins: [
+            LockPlugin
+        ],
+        LockPlugin: {
+            minDate: new Date(new Date().setDate(new Date().getDate() + 1)),
+            filter: (date) => {
+                return date.getDay() === 5 || date.getDay() === 6;
+            }
+        },
+        setup(picker) {
+            picker.on('select', (e) => {
+                form.scheduled_date = e.detail.date.format('YYYY-MM-DD');
+            })
+        }
+    })
+}
+
+onMounted(() => {
+    createPicker();
+})
+
 </script>
 
 <template>
@@ -38,6 +72,8 @@ const handleSelectVaccineCenter = (center) => {
                 Vaccine Schedule
             </h2>
         </template>
+
+        {{ form }}
 
         <div class="py-12">
             <div class="mx-auto max-w-7xl sm:px-6 lg:px-8 space-y-3">
@@ -57,12 +93,11 @@ const handleSelectVaccineCenter = (center) => {
                     </h3>
 
                     <div>
-                        <TextInput
-                            id="vaccine_center_id"
-                            type="text"
-                            class="mt-1 block w-full"
+                        <input
+                            ref="pickerRef"
+                            placeholder="Choose a date"
+                            class="rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 w-full"
                             v-model="form.scheduled_date"
-                            required
                         />
 
                         <InputError class="mt-2" :message="form.errors.scheduled_date"/>
