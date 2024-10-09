@@ -22,7 +22,7 @@ const showingNavigationDropdown = ref(false);
                         <div class="flex">
                             <!-- Logo -->
                             <div class="flex shrink-0 items-center">
-                                <Link :href="route('dashboard')">
+                                <Link :href="route('home')">
                                     <ApplicationLogo
                                         class="block h-9 w-auto fill-current text-gray-800"
                                     />
@@ -34,17 +34,17 @@ const showingNavigationDropdown = ref(false);
                                 class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex"
                             >
                                 <NavLink
-                                    :href="route('dashboard')"
-                                    :active="route().current('dashboard')"
+                                    :href="route('home')"
+                                    :active="route().current('home')"
                                 >
-                                    Dashboard
+                                    Covid Vaccine Registration System
                                 </NavLink>
                             </div>
                         </div>
 
                         <div class="hidden sm:ms-6 sm:flex sm:items-center">
                             <!-- Settings Dropdown -->
-                            <div class="relative ms-3">
+                            <div class="relative ms-3" v-if="$page.props.auth.user">
                                 <Dropdown align="right" width="48">
                                     <template #trigger>
                                         <span class="inline-flex rounded-md">
@@ -85,6 +85,17 @@ const showingNavigationDropdown = ref(false);
                                         </DropdownLink>
                                     </template>
                                 </Dropdown>
+                            </div>
+                            <div
+                                v-else
+                                class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex h-16"
+                            >
+                                <NavLink
+                                    :href="route('register')"
+                                    :active="route().current('register')"
+                                >
+                                    Register
+                                </NavLink>
                             </div>
                         </div>
 
@@ -141,16 +152,17 @@ const showingNavigationDropdown = ref(false);
                 >
                     <div class="space-y-1 pb-3 pt-2">
                         <ResponsiveNavLink
-                            :href="route('dashboard')"
-                            :active="route().current('dashboard')"
+                            :href="route('home')"
+                            :active="route().current('home')"
                         >
-                            Dashboard
+                            Home
                         </ResponsiveNavLink>
                     </div>
 
                     <!-- Responsive Settings Options -->
                     <div
                         class="border-t border-gray-200 pb-1 pt-4"
+                        v-if="$page.props.auth.user"
                     >
                         <div class="px-4">
                             <div
