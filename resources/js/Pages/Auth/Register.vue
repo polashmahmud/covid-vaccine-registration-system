@@ -6,9 +6,16 @@ import PrimaryButton from '@/Components/PrimaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
 import { Head, Link, useForm } from '@inertiajs/vue3';
 
+defineProps({
+    centers: {
+        type: Object,
+        required: true,
+    }
+})
 const form = useForm({
     name: '',
     nid: '',
+    vaccine_center_id: '',
     email: '',
     password: '',
     password_confirmation: '',
@@ -34,7 +41,7 @@ const submit = () => {
                     type="text"
                     class="mt-1 block w-full"
                     v-model="form.name"
-                    required
+
                     autofocus
                     autocomplete="name"
                     placeholder="Enter your full name"
@@ -52,7 +59,7 @@ const submit = () => {
                     class="mt-1 block w-full"
                     v-model="form.email"
                     autocomplete="username"
-                    required
+
                     placeholder="Enter your email address"
                 />
 
@@ -68,11 +75,33 @@ const submit = () => {
                     class="mt-1 block w-full"
                     v-model="form.nid"
                     v-mask="'#################'"
-                    required
+
                     placeholder="Enter your NID number"
                 />
 
                 <InputError class="mt-2" :message="form.errors.nid" />
+            </div>
+
+            <div class="mt-4">
+                <InputLabel for="vaccine_center" value="Vaccine Center" />
+
+                <select
+                    id="vaccine_center"
+                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                    v-model="form.vaccine_center_id"
+
+                >
+                    <option value="">Select Vaccine Center</option>
+                    <option
+                        v-for="center in centers"
+                        :key="center.id"
+                        :value="center.id"
+                    >
+                        {{ center.name }} ({{ center.location }})
+                    </option>
+                </select>
+
+                <InputError class="mt-2" :message="form.errors.vaccine_center_id" />
             </div>
 
             <div class="mt-4">
@@ -84,7 +113,7 @@ const submit = () => {
                     class="mt-1 block w-full"
                     v-model="form.password"
                     autocomplete="new-password"
-                    required
+
                     placeholder="Enter your password"
                 />
 
@@ -103,7 +132,7 @@ const submit = () => {
                     class="mt-1 block w-full"
                     v-model="form.password_confirmation"
                     autocomplete="new-password"
-                    required
+
                     placeholder="Confirm your password"
                 />
 

@@ -11,9 +11,18 @@ class Registration extends Model
     use SoftDeletes, HasFactory;
 
     protected $fillable = [
+        'user_id',
+        'vaccine_center_id',
         'scheduled_date',
         'status',
     ];
+
+    protected function casts()
+    {
+        return [
+            'scheduled_date' => 'date',
+        ];
+    }
 
     public function user()
     {
@@ -23,12 +32,5 @@ class Registration extends Model
     public function vaccineCenter()
     {
         return $this->belongsTo(VaccineCenter::class);
-    }
-
-    protected function casts()
-    {
-        return [
-            'scheduled_date' => 'date',
-        ];
     }
 }
