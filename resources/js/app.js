@@ -5,6 +5,7 @@ import { createInertiaApp } from '@inertiajs/vue3';
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 import { createApp, h } from 'vue';
 import { ZiggyVue } from '../../vendor/tightenco/ziggy';
+import VueTheMask from 'vue-the-mask'
 
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 
@@ -19,6 +20,7 @@ createInertiaApp({
         return createApp({ render: () => h(App, props) })
             .use(plugin)
             .use(ZiggyVue)
+            .use(VueTheMask)
             .mount(el);
     },
     progress: {

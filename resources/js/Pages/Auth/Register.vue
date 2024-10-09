@@ -34,9 +34,10 @@ const submit = () => {
                     type="text"
                     class="mt-1 block w-full"
                     v-model="form.name"
-
+                    required
                     autofocus
                     autocomplete="name"
+                    placeholder="Enter your full name"
                 />
 
                 <InputError class="mt-2" :message="form.errors.name" />
@@ -50,8 +51,9 @@ const submit = () => {
                     type="email"
                     class="mt-1 block w-full"
                     v-model="form.email"
-
                     autocomplete="username"
+                    required
+                    placeholder="Enter your email address"
                 />
 
                 <InputError class="mt-2" :message="form.errors.email" />
@@ -62,9 +64,12 @@ const submit = () => {
 
                 <TextInput
                     id="nid"
-                    type="number"
+                    type="tel"
                     class="mt-1 block w-full"
                     v-model="form.nid"
+                    v-mask="'#################'"
+                    required
+                    placeholder="Enter your NID number"
                 />
 
                 <InputError class="mt-2" :message="form.errors.nid" />
@@ -78,8 +83,9 @@ const submit = () => {
                     type="password"
                     class="mt-1 block w-full"
                     v-model="form.password"
-
                     autocomplete="new-password"
+                    required
+                    placeholder="Enter your password"
                 />
 
                 <InputError class="mt-2" :message="form.errors.password" />
@@ -96,8 +102,9 @@ const submit = () => {
                     type="password"
                     class="mt-1 block w-full"
                     v-model="form.password_confirmation"
-
                     autocomplete="new-password"
+                    required
+                    placeholder="Confirm your password"
                 />
 
                 <InputError
