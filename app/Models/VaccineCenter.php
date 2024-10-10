@@ -15,4 +15,9 @@ class VaccineCenter extends Model
         'location',
         'daily_capacity',
     ];
+
+    public function registrations(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(Registration::class);
+    }
 }
