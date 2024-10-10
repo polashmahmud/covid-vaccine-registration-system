@@ -13,8 +13,6 @@ class User extends Authenticatable
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable, Searchable;
 
-    public $asYouType = true;
-
     /**
      * The attributes that are mass assignable.
      *
@@ -47,6 +45,16 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+        ];
+    }
+
+    public $asYouType = true;
+
+    public function toSearchableArray()
+    {
+        return [
+            'id' => $this->id,
+            'nid' => $this->nid
         ];
     }
 

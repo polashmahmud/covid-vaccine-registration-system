@@ -2,6 +2,18 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import {Head} from '@inertiajs/vue3';
 import Notification from "@/Components/Notification.vue";
+import axios from "axios";
+import {ref} from "vue";
+import UserDetails from "@/Components/UserDetails.vue";
+
+const users = ref([])
+
+const search = (value) => {
+    axios.get(route('home', {search: value}))
+        .then(response => {
+            users.value = response.data
+        })
+}
 </script>
 
 <template>
@@ -26,12 +38,25 @@ import Notification from "@/Components/Notification.vue";
 
         <div class="py-12">
             <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
-                <Notification v-if="$page.props.auth?.user" />
+                <Notification v-if="$page.props.auth?.user"/>
                 <div class="overflow-hidden bg-white shadow-sm sm:rounded-lg">
                     <div class="p-6 text-gray-900">
-                        Search for a vaccine center to register for a vaccine.
+                        <input
+                            type="search"
+                            class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-blue-100 focus:border-blue-300"
+                            placeholder="Search by 17 digit NID number"
+                            @input="search($event.target.value)"
+                        />
                     </div>
                 </div>
+                <div class="mt-4">
+                    <UserDetails
+                        v-for="user in users"
+                        :key="user.id"
+                        :user="user"
+                    />
+                </div>
+
             </div>
         </div>
     </AuthenticatedLayout>
