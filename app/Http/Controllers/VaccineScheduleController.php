@@ -21,17 +21,19 @@ class VaccineScheduleController extends Controller
 
     public function store(VaccineScheduleRequest $request)
     {
+        // Find the vaccine center
         $vaccineCenter = VaccineCenter::findOrFail($request->vaccine_center_id);
 
-        $lock = Cache::lock('vaccine_schedule_' . $vaccineCenter->id. '_'. Str::replace('-', '_', $request->scheduled_date),
-            10);
+        // Create a lock for scheduling
+        $lockKey = 'vaccine_schedule_'.$vaccineCenter->id.'_'.Str::replace('-', '_', $request->scheduled_date);
+        $lock = Cache::lock($lockKey, 10);
 
         if (!$lock->get()) {
             return back()->withErrors('scheduled_date', 'Failed to schedule vaccine. Please try again.');
         }
 
         try {
-            // Vaccine center availability check
+            // Check if the vaccine center is fully booked for the scheduled date
             $isFullyBooked = $vaccineCenter->registrations()
                     ->where('scheduled_date', $request->scheduled_date)
                     ->count() >= $vaccineCenter->daily_capacity;
