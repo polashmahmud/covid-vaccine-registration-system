@@ -26,7 +26,7 @@ import Notification from "@/Components/Notification.vue";
 
         <div class="py-12">
             <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
-                <Notification v-if="$page.props.auth.user?.registration.status !== 'Not Scheduled'" />
+                <Notification v-if="$page.props.auth?.user" />
                 <div class="overflow-hidden bg-white shadow-sm sm:rounded-lg">
                     <div class="p-6 text-gray-900">
                         Search for a vaccine center to register for a vaccine.

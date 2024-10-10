@@ -61,11 +61,7 @@ onMounted(() => {
 
 const save = () => {
     form.post(route('vaccine-schedule.store'), {
-        preserveScroll: true,
-        onSuccess: () => {
-            picker.destroy();
-            createPicker();
-        }
+        preserveScroll: true
     });
 }
 
