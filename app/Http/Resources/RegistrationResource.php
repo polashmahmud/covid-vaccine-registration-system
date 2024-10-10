@@ -14,7 +14,7 @@ class RegistrationResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'scheduled_date' => $this->scheduled_date,
+            'scheduled_date' => $this->scheduled_date->format('Y-m-d'),
             'status' => Str::title(Str::replace('_', ' ', $this->status)),
             'user' => new UserResource($this->whenLoaded('user')),
             'vaccineCenter' => new VaccineCenterResource($this->whenLoaded('vaccineCenter')),

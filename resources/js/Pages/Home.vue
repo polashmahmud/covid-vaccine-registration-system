@@ -1,6 +1,7 @@
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import {Head} from '@inertiajs/vue3';
+import Notification from "@/Components/Notification.vue";
 </script>
 
 <template>
@@ -16,7 +17,8 @@ import {Head} from '@inertiajs/vue3';
                     Covid Vaccine Registration System
                 </h2>
 
-                <span v-if="$page.props.auth.user" class="bg-blue-100 text-blue-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300">
+                <span v-if="$page.props.auth.user"
+                      class="bg-blue-100 text-blue-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300">
                     Status: <span class="font-semibold">{{ $page.props.auth.user?.registration.status }}</span>
                 </span>
             </div>
@@ -24,9 +26,8 @@ import {Head} from '@inertiajs/vue3';
 
         <div class="py-12">
             <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
-                <div
-                    class="overflow-hidden bg-white shadow-sm sm:rounded-lg"
-                >
+                <Notification v-if="$page.props.auth.user?.registration.status !== 'Not Scheduled'" />
+                <div class="overflow-hidden bg-white shadow-sm sm:rounded-lg">
                     <div class="p-6 text-gray-900">
                         Search for a vaccine center to register for a vaccine.
                     </div>

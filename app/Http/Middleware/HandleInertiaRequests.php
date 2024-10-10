@@ -34,7 +34,7 @@ class HandleInertiaRequests extends Middleware
         return [
             ...parent::share($request),
             'auth' => [
-                'user' => $request->user() ? UserResource::make($request->user()->load('registration')) : null,
+                'user' => $request->user() ? UserResource::make($request->user()->load('registration.vaccineCenter')) : null,
             ],
             'notification' => collect(Arr::only($request->session()->all(), ['success', 'error', 'waring', 'info']))
                 ->mapWithKeys(function ($notification, $key) {
