@@ -75,7 +75,6 @@ const submit = () => {
                     class="mt-1 block w-full"
                     v-model="form.nid"
                     v-mask="'#################'"
-
                     placeholder="Enter your NID number"
                 />
 

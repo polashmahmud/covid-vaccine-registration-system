@@ -1,12 +1,16 @@
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import {Head} from '@inertiajs/vue3';
+import {Head, Link} from '@inertiajs/vue3';
 import Notification from "@/Components/Notification.vue";
 import axios from "axios";
-import {ref} from "vue";
+import {computed, ref, watch} from "vue";
 import UserDetails from "@/Components/UserDetails.vue";
+import TextInput from "@/Components/TextInput.vue";
+import InputError from "@/Components/InputError.vue";
 
 const users = ref([])
+const searchValue = ref('')
+const errorMessage = ref('')
 
 const search = (value) => {
     axios.get(route('home', {search: value}))
@@ -14,6 +18,28 @@ const search = (value) => {
             users.value = response.data
         })
 }
+
+watch(searchValue, (value) => {
+    const length = value.length;
+
+    if (length === 17) {
+        search(value);
+    } else {
+        users.value = [];
+    }
+
+    if (length > 0 && length !== 17) {
+        errorMessage.value = length < 17
+            ? 'Invalid NID number'
+            : 'NID number should be 17 digits';
+    } else {
+        errorMessage.value = '';
+    }
+});
+
+const noUserFound = computed(() => {
+    return errorMessage.value === '' && users.value.length === 0 && searchValue.value.length === 17
+})
 </script>
 
 <template>
@@ -41,22 +67,32 @@ const search = (value) => {
                 <Notification v-if="$page.props.auth?.user"/>
                 <div class="overflow-hidden bg-white shadow-sm sm:rounded-lg">
                     <div class="p-6 text-gray-900">
-                        <input
-                            type="search"
-                            class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-blue-100 focus:border-blue-300"
+                        <TextInput
+                            id="nid"
+                            type="tel"
+                            class="mt-1 block w-full"
+                            v-model="searchValue"
                             placeholder="Search by 17 digit NID number"
-                            @input="search($event.target.value)"
                         />
+
+                        <InputError class="mt-2" :message="errorMessage"/>
                     </div>
                 </div>
                 <div class="mt-4">
                     <UserDetails
+                        v-if="users.length"
                         v-for="user in users"
                         :key="user.id"
                         :user="user"
                     />
+                    <div v-if="noUserFound">
+                        <div class="p-6 text-gray-900">
+                            <p class="text-center">
+                                No user found, please search by 17 digit NID number to get user details or <Link class="text-blue-500 hover:text-blue-600" :href="route('register')">register</Link> for vaccine.
+                            </p>
+                        </div>
+                    </div>
                 </div>
-
             </div>
         </div>
     </AuthenticatedLayout>
