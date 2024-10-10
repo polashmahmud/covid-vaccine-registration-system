@@ -12,12 +12,14 @@ const users = ref([])
 const searchValue = ref('')
 const errorMessage = ref('')
 
-const search = (value) => {
-    axios.get(route('home', {search: value}))
-        .then(response => {
-            users.value = response.data
-        })
-}
+const search = async (value) => {
+    try {
+        const {data} = await axios.get(route('home', {search: value}));
+        users.value = data;
+    } catch {
+        users.value = [];
+    }
+};
 
 watch(searchValue, (value) => {
     const length = value.length;
@@ -88,7 +90,10 @@ const noUserFound = computed(() => {
                     <div v-if="noUserFound">
                         <div class="p-6 text-gray-900">
                             <p class="text-center">
-                                No user found, please search by 17 digit NID number to get user details or <Link class="text-blue-500 hover:text-blue-600" :href="route('register')">register</Link> for vaccine.
+                                No user found, please search by 17 digit NID number to get user details or
+                                <Link class="text-blue-500 hover:text-blue-600" :href="route('register')">register
+                                </Link>
+                                for vaccine.
                             </p>
                         </div>
                     </div>
