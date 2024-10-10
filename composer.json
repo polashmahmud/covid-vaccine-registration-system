@@ -10,7 +10,9 @@
         "laravel/breeze": "^2.2",
         "laravel/framework": "^11.9",
         "laravel/sanctum": "^4.0",
+        "laravel/scout": "^10.11",
         "laravel/tinker": "^2.9",
+        "teamtnt/laravel-scout-tntsearch-driver": "^14.0",
         "tightenco/ziggy": "^2.0"
     },
     "require-dev": {
