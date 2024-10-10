@@ -40,7 +40,7 @@ const showingNavigationDropdown = ref(false);
                                     Covid Vaccine Registration System
                                 </NavLink>
                                  <NavLink
-                                     v-if="$page.props.auth.user.registration.status === 'Not Scheduled'"
+                                     v-if="$page.props.auth.user?.registration.status === 'Not Scheduled'"
                                     :href="route('vaccine-schedule.index')"
                                     :active="route().current('vaccine-schedule.index')"
                                 >

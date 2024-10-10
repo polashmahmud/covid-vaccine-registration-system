@@ -6,7 +6,7 @@ import PrimaryButton from "@/Components/PrimaryButton.vue";
 import VaccineCenter from "@/Components/VaccineCenter.vue";
 import Pagination from "@/Components/Pagination.vue";
 import {onMounted, ref} from "vue";
-import { easepick, LockPlugin } from "@easepick/bundle";
+import {easepick, LockPlugin} from "@easepick/bundle";
 import style from "@easepick/bundle/dist/index.css?url";
 
 const props = defineProps({
@@ -59,6 +59,16 @@ onMounted(() => {
     createPicker();
 })
 
+const save = () => {
+    form.post(route('vaccine-schedule.store'), {
+        preserveScroll: true,
+        onSuccess: () => {
+            picker.destroy();
+            createPicker();
+        }
+    });
+}
+
 </script>
 
 <template>
@@ -73,8 +83,6 @@ onMounted(() => {
             </h2>
         </template>
 
-        {{ form }}
-
         <div class="py-12">
             <div class="mx-auto max-w-7xl sm:px-6 lg:px-8 space-y-3">
                 <div class="overflow-hidden bg-white shadow-sm sm:rounded-lg p-6 text-gray-900 space-y-3">
@@ -87,6 +95,8 @@ onMounted(() => {
                         <br>
                         <span class="font-semibold">Address:</span> {{ form.vaccine_center_location }}
                     </div>
+
+                    <InputError class="mt-2" :message="form.errors.vaccine_center_id"/>
 
                     <h3 class="text-lg font-semibold">
                         2. Vaccine Schedule Date
@@ -104,7 +114,7 @@ onMounted(() => {
                     </div>
 
                     <div>
-                        <PrimaryButton>
+                        <PrimaryButton @click.prevent="save">
                             Save
                         </PrimaryButton>
                     </div>
@@ -125,7 +135,7 @@ onMounted(() => {
                 </div>
 
                 <div class="flex items-center justify-center mt-6">
-                    <Pagination :pagination="vaccineCenters.meta" />
+                    <Pagination :pagination="vaccineCenters.meta"/>
                 </div>
             </div>
         </div>

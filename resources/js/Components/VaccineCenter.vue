@@ -9,8 +9,8 @@ const emit = defineEmits(['select-vaccine-center'])
 
 <template>
     <div
-        class="inline-block bg-gray-200 py-2 px-4 rounded-md cursor-pointer border border-gray-400"
-        :class="{ 'border-blue-500': selectedVaccineCenterId === vaccineCenter.id }"
+        class="inline-block bg-gray-200 py-2 px-4 rounded-md cursor-pointer border"
+        :class="selectedVaccineCenterId === vaccineCenter.id ? 'border-blue-500' : 'border-gray-400'"
         @click="emit('select-vaccine-center', vaccineCenter)"
     >
         <span class="font-semibold">Name:</span> {{ vaccineCenter.name }}
