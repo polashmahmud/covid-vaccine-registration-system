@@ -14,7 +14,7 @@ class SendVaccinationReminderJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    protected $registration;
+    public $registration;
 
     public function __construct($registration)
     {
