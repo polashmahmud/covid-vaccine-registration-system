@@ -49,7 +49,7 @@ class VaccineScheduleController extends Controller
                 'status' => 'scheduled',
             ]);
 
-            return back()->with('success', 'Vaccine schedule updated successfully.');
+            return redirect()->route('home')->with('success', 'Vaccine scheduled successfully.');
 
         } catch (\Exception $e) {
             return back()->withErrors('scheduled_date', 'Failed to schedule vaccine. Please try again.');
