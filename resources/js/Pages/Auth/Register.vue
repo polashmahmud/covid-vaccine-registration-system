@@ -4,7 +4,7 @@ import InputError from '@/Components/InputError.vue';
 import InputLabel from '@/Components/InputLabel.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
-import { Head, Link, useForm } from '@inertiajs/vue3';
+import {Head, Link, router, useForm} from '@inertiajs/vue3';
 
 defineProps({
     centers: {
@@ -14,7 +14,7 @@ defineProps({
 })
 const form = useForm({
     name: '',
-    nid: '',
+    nid: route().params.nid ?? '',
     vaccine_center_id: '',
     email: '',
     password: '',

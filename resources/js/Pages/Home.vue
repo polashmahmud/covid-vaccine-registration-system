@@ -91,7 +91,7 @@ const noUserFound = computed(() => {
                         <div class="p-6 text-gray-900">
                             <p class="text-center">
                                 No user found, please search by 17 digit NID number to get user details or
-                                <Link class="text-blue-500 hover:text-blue-600" :href="route('register')">register
+                                <Link class="text-blue-500 hover:text-blue-600" :href="`/register?nid=${searchValue}`">register
                                 </Link>
                                 for vaccine.
                             </p>
