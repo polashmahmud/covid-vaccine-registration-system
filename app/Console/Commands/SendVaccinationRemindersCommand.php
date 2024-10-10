@@ -4,7 +4,6 @@ namespace App\Console\Commands;
 
 use App\Jobs\SendVaccinationReminderJob;
 use App\Models\Registration;
-use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
 

@@ -18,6 +18,9 @@ return Application::configure(basePath: dirname(__DIR__))
 
         //
     })
+    ->withSchedule(function ($schedule) {
+        $schedule->command('send:vaccination-reminders')->dailyAt('21:00');
+    })
     ->withExceptions(function (Exceptions $exceptions) {
         //
     })->create();
