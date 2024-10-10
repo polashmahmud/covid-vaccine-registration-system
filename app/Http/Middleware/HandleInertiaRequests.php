@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use App\Http\Resources\UserResource;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 use Inertia\Middleware;
 
 class HandleInertiaRequests extends Middleware
@@ -35,6 +36,10 @@ class HandleInertiaRequests extends Middleware
             'auth' => [
                 'user' => $request->user() ? UserResource::make($request->user()->load('registration')) : null,
             ],
+            'notification' => collect(Arr::only($request->session()->all(), ['success', 'error', 'waring', 'info']))
+                ->mapWithKeys(function ($notification, $key) {
+                    return ['type' => $key, 'body' => $notification];
+                }),
         ];
     }
 }
