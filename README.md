@@ -1,4 +1,4 @@
-# COVID Vaccine Registration System
+# COVID Vaccine Registration and Scheduling System
 
 This project is a COVID vaccine registration system developed using Laravel. The system allows users to register for
 vaccination at a vaccine center and schedules their vaccination date based on availability. Users can search their
@@ -10,14 +10,18 @@ vaccination status using their National ID (NID).
 - Selection of vaccine centers during registration.
 - Vaccination scheduling based on a "first come, first served" strategy.
 - Email notification sent to users the night before their scheduled vaccination date.
-- Search functionality to check vaccination status based on NID using **TNTSearch** for fast and optimized search.
-- Statuses: `Not registered`, `Not scheduled`, `Scheduled`, and `Vaccinated`.
+- Search functionality to check vaccination status based on NID.
+- Statuses: 
+  - `Not registered`
+  - `Not scheduled` 
+  - `Scheduled`
+  - `Vaccinated`.
 - Pre-populated database with vaccine centers (no CRUD for centers).
 - Scheduling only on weekdays (Sunday to Thursday).
 
 ## Prerequisites
 
-- PHP >= 8.0
+- PHP >= 8.2
 - Composer
 - MySQL
 - Node.js & npm/yarn
@@ -112,6 +116,18 @@ php artisan serve
 
 Now, the application should be accessible at `http://localhost:8000`.
 
+13. Run the queue worker to send email notifications:
+
+```bash
+php artisan queue:work
+```
+
+14. To schedule users for vaccination, run the following command:
+
+```bash
+php artisan schedule:run
+```
+
 ## TNTSearch Integration
 
 This project uses **TNTSearch** along with Laravel Scout for the search functionality. The search is optimized for speed
@@ -155,10 +171,11 @@ mail settings are configured correctly in the `.env` file.
 
 - **Indexing:** Using **TNTSearch** for optimized search functionality. The search is fast and efficient. The search
   index is updated whenever a new user is registered or scheduled.
-- **Caching:** If i have more time, I would implement caching to centralize the caching logic and reduce the number of
-  database queries.
+- **Caching:** Given more time, I would implement caching to centralize the caching logic and reduce the number of database queries.
 - **Queuing:** Using Laravel queues for sending email notifications. This ensures that the application remains
   responsive and the user does not have to wait for the email to be sent.
+- **Atomic Locks:** Using atomic locks to prevent race conditions when scheduling users for vaccination. This ensures
+  that only one user can be scheduled at a time.
 
 ## Future Enhancements
 
@@ -169,6 +186,10 @@ If an SMS notification feature is needed in the future, the following changes wo
   include SMS functionality.
 - **Environment Variables:** Add SMS API credentials in the `.env` file.
 - **phone_number:** Add a phone number field to the user registration form.
+
+## Testing
+
+Due to time constraints, I was unable to write tests for this project. In the future, I plan to write unit and feature tests using Pest.
 
 ## License
 
