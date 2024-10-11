@@ -26,35 +26,31 @@ class VaccineScheduleController extends Controller
 
         // Create a lock for scheduling
         $lockKey = 'vaccine_schedule_'.$vaccineCenter->id.'_'.Str::replace('-', '_', $request->scheduled_date);
-        $lock = Cache::lock($lockKey, 10);
 
-        if (!$lock->get()) {
-            return back()->withErrors('scheduled_date', 'Failed to schedule vaccine. Please try again.');
-        }
-
-        try {
-            // Check if the vaccine center is fully booked for the scheduled date
-            $isFullyBooked = $vaccineCenter->registrations()
-                    ->where('scheduled_date', $request->scheduled_date)
-                    ->count() >= $vaccineCenter->daily_capacity;
-
-            if ($isFullyBooked) {
+        return Cache::lock($lockKey, 10)->block(5, function () use ($request, $vaccineCenter) {
+            if ($this->isFullyBooked($vaccineCenter, $request->scheduled_date)) {
                 return back()->withErrors(['scheduled_date' => 'No available slot for this date. Please choose another date.']);
             }
 
-            // Update user's vaccine registration
-            $request->user()->registration->update([
-                'vaccine_center_id' => $request->vaccine_center_id,
-                'scheduled_date' => $request->scheduled_date,
-                'status' => 'scheduled',
-            ]);
+            $this->scheduleVaccine($request);
 
             return redirect()->route('home')->with('success', 'Vaccine scheduled successfully.');
+        });
+    }
 
-        } catch (\Exception $e) {
-            return back()->withErrors('scheduled_date', 'Failed to schedule vaccine. Please try again.');
-        } finally {
-            $lock->release();
-        }
+    private function isFullyBooked($vaccineCenter, $scheduledDate)
+    {
+        return $vaccineCenter->registrations()
+                ->where('scheduled_date', $scheduledDate)
+                ->count() >= $vaccineCenter->daily_capacity;
+    }
+
+    private function scheduleVaccine($request)
+    {
+        $request->user()->registration->update([
+            'vaccine_center_id' => $request->vaccine_center_id,
+            'scheduled_date' => $request->scheduled_date,
+            'status' => 'scheduled',
+        ]);
     }
 }
