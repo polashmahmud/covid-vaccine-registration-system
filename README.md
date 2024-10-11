@@ -1,66 +1,175 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# COVID Vaccine Registration System
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+This project is a COVID vaccine registration system developed using Laravel. The system allows users to register for
+vaccination at a vaccine center and schedules their vaccination date based on availability. Users can search their
+vaccination status using their National ID (NID).
 
-## About Laravel
+## Features
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+- User registration for vaccination.
+- Selection of vaccine centers during registration.
+- Vaccination scheduling based on a "first come, first served" strategy.
+- Email notification sent to users the night before their scheduled vaccination date.
+- Search functionality to check vaccination status based on NID using **TNTSearch** for fast and optimized search.
+- Statuses: `Not registered`, `Not scheduled`, `Scheduled`, and `Vaccinated`.
+- Pre-populated database with vaccine centers (no CRUD for centers).
+- Scheduling only on weekdays (Sunday to Thursday).
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Prerequisites
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+- PHP >= 8.0
+- Composer
+- MySQL
+- Node.js & npm/yarn
+- Laravel 11
+- **TNTSearch**
 
-## Learning Laravel
+## Installation
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+1. Clone the repository:
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+```bash
+git clone git@github.com:polashmahmud/covid-vaccine-registration-system.git
+```
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+2. Navigate to the project directory:
 
-## Laravel Sponsors
+```bash
+cd covid-vaccine-registration-system
+```
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+3. Install dependencies:
 
-### Premium Partners
+```bash
+composer install
+```
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+4. Copy `.env.example` to `.env`:
 
-## Contributing
+```bash
+cp .env.example .env
+```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+5. Generate application key:
 
-## Code of Conduct
+```bash
+php artisan key:generate
+```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+6. Configure the `.env` file with your database details:
 
-## Security Vulnerabilities
+```env
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=your_database_name
+DB_USERNAME=your_database_user
+DB_PASSWORD=your_database_password
+```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+7. Configure the mail settings in the `.env` file:
+
+```env
+MAIL_MAILER=log
+MAIL_HOST=127.0.0.1
+MAIL_PORT=2525
+MAIL_USERNAME=null
+MAIL_PASSWORD=null
+MAIL_ENCRYPTION=null
+MAIL_FROM_ADDRESS="hello@example.com"
+MAIL_FROM_NAME="${APP_NAME}"
+```
+
+8. Run migrations and seed the vaccine centers:
+
+```bash
+php artisan migrate --seed
+```
+
+9. Install frontend dependencies and compile assets:
+
+```bash
+npm install && npm run dev
+```
+
+10. Update your `.env` file to use TNTSearch as the Scout driver:
+
+```env
+SCOUT_DRIVER=tntsearch
+```
+
+11. Add the search indexing command to your setup process:
+
+```bash
+php artisan scout:import "App\\Models\\User"
+```
+
+12. Run the application:
+
+```bash
+php artisan serve
+```
+
+Now, the application should be accessible at `http://localhost:8000`.
+
+## TNTSearch Integration
+
+This project uses **TNTSearch** along with Laravel Scout for the search functionality. The search is optimized for speed
+and performance, allowing users to quickly find their vaccination status based on their NID.
+
+Make sure to install and configure TNTSearch by following these steps:
+
+1. Update your `.env` file to use TNTSearch as the Scout driver:
+
+```env
+SCOUT_DRIVER=tntsearch
+```
+
+2. Add the search indexing command to your setup process:
+
+```bash
+php artisan scout:import "App\\Models\\User"
+```
+
+## Usage
+
+1. **User Registration:**
+    - Navigate to `/register` to register for a vaccination.
+    - Select a vaccine center during registration.
+
+2. **Search for Vaccination Status:**
+    - Navigate to home page and enter your NID to check the vaccination status.
+    - The system will display the status based on the NID.
+    - The statuses are `Not registered`, `Not scheduled`, `Scheduled`, and `Vaccinated`.
+    - If the user is `Scheduled`, the system will display the scheduled date.
+    - If the user is `Vaccinated`, the system will display the vaccination date.
+    - If the user is not found, the system will display `Not registered`.
+    - NID number should be 17 digits.
+
+## Email Notification
+
+The system sends an email notification at 9 PM the night before the user's scheduled vaccination date. Ensure that your
+mail settings are configured correctly in the `.env` file.
+
+## Optimizations
+
+- **Indexing:** Using **TNTSearch** for optimized search functionality. The search is fast and efficient. The search
+  index is updated whenever a new user is registered or scheduled.
+- **Caching:** If i have more time, I would implement caching to centralize the caching logic and reduce the number of
+  database queries.
+- **Queuing:** Using Laravel queues for sending email notifications. This ensures that the application remains
+  responsive and the user does not have to wait for the email to be sent.
+
+## Future Enhancements
+
+If an SMS notification feature is needed in the future, the following changes would be made:
+
+- **Integration:** Integrate with an SMS gateway service such as Twilio or Nexmo.
+- **Notification:** Update the notification logic to send both email and SMS by modifying the `NotifyUser` class to
+  include SMS functionality.
+- **Environment Variables:** Add SMS API credentials in the `.env` file.
+- **phone_number:** Add a phone number field to the user registration form.
 
 ## License
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+This project is licensed under the MIT License.
