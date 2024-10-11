@@ -89,9 +89,17 @@ const noUserFound = computed(() => {
                     />
                     <div v-if="noUserFound">
                         <div class="p-6 text-gray-900">
-                            <p class="text-center">
+                            <p class="text-center" v-if="$page.props.auth?.user">
+                                No user found, please search by 17 digit NID number to get user details. or
+                                <Link :href="route('logout')" method="post" class="text-blue-500 hover:text-blue-600">
+                                    Logout
+                                </Link>
+                                to register for vaccine.
+                            </p>
+                            <p class="text-center" v-else>
                                 No user found, please search by 17 digit NID number to get user details or
-                                <Link class="text-blue-500 hover:text-blue-600" :href="`/register?nid=${searchValue}`">register
+                                <Link class="text-blue-500 hover:text-blue-600" :href="`/register?nid=${searchValue}`">
+                                    register
                                 </Link>
                                 for vaccine.
                             </p>
